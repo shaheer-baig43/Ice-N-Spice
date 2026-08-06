@@ -57,12 +57,12 @@ function MenuContent() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const { data: catData, error: catError } = await supabase
+        const { data: catData } = await supabase
           .from("categories")
           .select("*")
           .order("display_order", { ascending: true })
 
-        const { data: itemData, error: itemError } = await supabase
+        const { data: itemData } = await supabase
           .from("menu_items")
           .select("*")
           .eq("is_available", true)
