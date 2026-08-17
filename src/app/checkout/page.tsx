@@ -116,7 +116,11 @@ export default function CheckoutPage() {
         .from("order_items")
         .insert(orderItems)
 
-      if (itemsError) throw itemsError
+      if (itemsError) {
+        // Rollback: Delete the created order since order items could not be inserted
+        await supabase.from("orders").delete().eq("id", order.id)
+        throw itemsError
+      }
 
       toast.success("Order placed successfully!", {
         description: `Order ID: #${order.id.slice(0, 8)}`

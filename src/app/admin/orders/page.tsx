@@ -37,7 +37,19 @@ export default function AdminOrdersPage() {
     try {
       let query = supabase
         .from("orders")
-        .select("*")
+        .select(`
+          *,
+          order_items (
+            id,
+            quantity,
+            unit_price,
+            menu_item:menu_items (
+              id,
+              name,
+              price
+            )
+          )
+        `)
         .order("created_at", { ascending: false })
       
       if (statusFilter !== "all") {
@@ -204,6 +216,20 @@ export default function AdminOrdersPage() {
                         <div className="flex flex-col">
                           <span className="font-mono text-xs font-black uppercase text-primary tracking-tighter">#{order.id.slice(0, 8)}</span>
                           <span className="text-[10px] text-muted-foreground uppercase font-bold mt-1">{new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                          
+                          {/* Order Items List */}
+                          <div className="mt-3 space-y-1">
+                            {order.order_items?.map((item) => (
+                              <div key={item.id} className="flex items-center gap-2">
+                                <Badge variant="secondary" className="h-4 w-4 p-0 flex items-center justify-center text-[8px] font-black rounded-sm bg-primary/20 text-primary border-none">
+                                  {item.quantity}
+                                </Badge>
+                                <span className="text-[9px] font-bold uppercase tracking-tight text-muted-foreground truncate max-w-[120px]">
+                                  {item.menu_item?.name}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </TableCell>
                       <TableCell>

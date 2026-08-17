@@ -47,6 +47,7 @@ export interface Order {
     phone?: string
   }
   created_at: string
+  order_items?: OrderItem[]
 }
 
 export interface OrderItem {
