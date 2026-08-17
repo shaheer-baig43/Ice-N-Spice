@@ -76,14 +76,21 @@ ALTER TABLE order_items ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public profiles are viewable by everyone." ON profiles FOR SELECT USING (true);
 CREATE POLICY "Users can update own profile." ON profiles FOR UPDATE USING (auth.uid() = id);
 
-CREATE POLICY "Allow public read access on categories" ON categories FOR SELECT USING (true);
-CREATE POLICY "Allow public read access on menu_items" ON menu_items FOR SELECT USING (true);
-
 CREATE POLICY "Allow public insert on orders" ON orders FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public read access on orders" ON orders FOR SELECT USING (true);
+CREATE POLICY "Allow public update on orders" ON orders FOR UPDATE USING (true);
 
 CREATE POLICY "Allow public insert on order_items" ON order_items FOR INSERT WITH CHECK (true);
 CREATE POLICY "Allow public read access on order_items" ON order_items FOR SELECT USING (true);
+CREATE POLICY "Allow public update on order_items" ON order_items FOR UPDATE USING (true);
+
+CREATE POLICY "Allow public read access on categories" ON categories FOR SELECT USING (true);
+CREATE POLICY "Allow public update on categories" ON categories FOR UPDATE USING (true);
+CREATE POLICY "Allow public delete on categories" ON categories FOR DELETE USING (true);
+
+CREATE POLICY "Allow public read access on menu_items" ON menu_items FOR SELECT USING (true);
+CREATE POLICY "Allow public update on menu_items" ON menu_items FOR UPDATE USING (true);
+CREATE POLICY "Allow public delete on menu_items" ON menu_items FOR DELETE USING (true);
 
 -- 9. AUTOMATIC PROFILE CREATION TRIGGER
 CREATE OR REPLACE FUNCTION public.handle_new_user()
